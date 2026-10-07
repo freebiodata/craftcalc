@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+const title = 'Page Not Found (404) | CraftCalc';
+const description = 'This page does not exist. Jump back to the tools or the sitemap.';
+---
+
+<Base title={title} description={description} canonical="/404" noindex>
+  <div class="wrap-narrow" style="padding:60px 0">
+    <h1>404: page not found</h1>
+    <p class="lead">
+      The page you requested does not exist (or has moved). The tools are all still here:
+    </p>
+    <ul>
+      <li><a href="/circle-generator/">Minecraft circle generator</a></li>
+      <li><a href="/nether-portal-calculator/">Nether portal calculator</a></li>
+      <li><a href="/beacon-calculator/">Beacon range calculator</a></li>
+      <li><a href="/tools/">All tools</a></li>
+    </ul>
+    <p><a class="btn btn-primary" href="/">← Back to home</a></p>
+  </div>
+</Base>

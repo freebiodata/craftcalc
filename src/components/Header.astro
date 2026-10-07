@@ -1,0 +1,28 @@
+---
+import { site } from '../data/site';
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-logo" href="/" aria-label={`${site.name} home`}>
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect x="4" y="4" width="11" height="11" rx="1.5" fill="#5fbb46" />
+        <rect x="17" y="4" width="11" height="11" rx="1.5" fill="#3d7a2e" />
+        <rect x="4" y="17" width="11" height="11" rx="1.5" fill="#3d7a2e" />
+        <rect x="17" y="17" width="11" height="11" rx="1.5" fill="#5fbb46" />
+      </svg>
+      {site.name}
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/tools/" aria-current={isActive('/tools') ? 'page' : undefined}>All tools</a>
+      <a href="/circle-generator/" aria-current={isActive('/circle-generator') ? 'page' : undefined}>Circle</a>
+      <a href="/sphere-generator/" aria-current={isActive('/sphere-generator') ? 'page' : undefined}>Sphere</a>
+      <a href="/nether-portal-calculator/" aria-current={isActive('/nether-portal') ? 'page' : undefined}>Nether portal</a>
+      <a href="/beacon-calculator/" aria-current={isActive('/beacon') ? 'page' : undefined}>Beacon</a>
+      <a href="/guides/" aria-current={isActive('/guides') ? 'page' : undefined}>Guides</a>
+    </nav>
+  </div>
+</header>

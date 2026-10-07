@@ -1,0 +1,46 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <div>
+        <h3>Build tools</h3>
+        <ul>
+          <li><a href="/circle-generator/">Circle generator</a></li>
+          <li><a href="/sphere-generator/">Sphere generator</a></li>
+          <li><a href="/tools/">All tools</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Game calculators</h3>
+        <ul>
+          <li><a href="/nether-portal-calculator/">Nether portal calculator</a></li>
+          <li><a href="/beacon-calculator/">Beacon range calculator</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Site</h3>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/methodology/">Methodology</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/sitemap/">Sitemap</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/terms/">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {site.name}. Free tools, no sign-up.</span>
+      <span>Not affiliated with Mojang or Microsoft. All calculations run in your browser.</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { site } from '../../data/site';
+
+const title = 'Guides: Minecraft Build Methods Explained | CraftCalc';
+const description =
+  'Short, practical guides to Minecraft building: circles, domes and shapes that look right in blocks. Written to pair with our free generators.';
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Guides' },
+];
+
+const guides = [
+  {
+    href: '/guides/circle-build-guide/',
+    title: 'How to build circles in Minecraft',
+    desc: 'The centre-first method: mark, quarter, mirror, detail. Works for any radius.',
+  },
+];
+---
+
+<Base title={title} description={description} breadcrumbs={breadcrumbs} canonical="/guides/">
+  <div class="wrap">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="hero">
+      <h1>Guides</h1>
+      <p class="value-line">
+        Short, practical explainers for building shapes in blocks. Each one pairs with a generator so
+        you can act on it immediately.
+      </p>
+    </div>
+
+    <section class="section" aria-labelledby="list">
+      <h2 id="list" class="visually-hidden">All guides</h2>
+      <ul class="tool-cards">
+        {guides.map((g) => (
+          <li>
+            <a class="tool-card" href={g.href}>
+              <span class="tc-title">{g.title}</span>
+              <p class="tc-desc">{g.desc}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="soon">
+      <h2 id="soon">In the works</h2>
+      <p class="lead">
+        Coming next: a dome-building guide (greenhouse and cathedral styles) and a beacon pyramid
+        showpiece tutorial. Want a topic covered? <a href="/contact/">Tell us</a>.
+      </p>
+    </section>
+  </div>
+</Base>

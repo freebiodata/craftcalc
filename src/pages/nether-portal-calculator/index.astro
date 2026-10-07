@@ -1,0 +1,201 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import TrustBlock from '../../components/TrustBlock.astro';
+import { site } from '../../data/site';
+
+const title = 'Nether Portal Calculator: Overworld to Nether Coords';
+const description =
+  'Convert Overworld coordinates to Nether coordinates (and back) at the correct 8:1 ratio, with portal linking tips. Free Minecraft calculator, in-browser.';
+
+const jsonLd = [
+  {
+    '@type': 'WebApplication',
+    '@id': `${site.url}/nether-portal-calculator/#app`,
+    name: 'Nether Portal Calculator',
+    url: `${site.url}/nether-portal-calculator/`,
+    description:
+      'Convert Overworld and Nether coordinates at the 8:1 dimension ratio and plan portal placements that link correctly.',
+    applicationCategory: 'GameApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+];
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'All tools', href: '/tools/' },
+  { name: 'Nether portal calculator' },
+];
+
+const faq = [
+  {
+    q: 'What is the Overworld to Nether coordinate ratio?',
+    a: '8:1. One block of Nether travel equals eight blocks in the Overworld, so divide Overworld X and Z by 8 to find the matching Nether position (and multiply Nether coordinates by 8 for the return trip). Y is unchanged.',
+  },
+  {
+    q: 'Why does my Nether portal link to the wrong place?',
+    a: 'Portals link by proximity: the game pairs Nether and Overworld portals that are closest to each other in scaled coordinates, searching within a radius. If two portals are near each other, link them deliberately by aligning their scaled coordinates with this calculator, ideally at matching Y.',
+  },
+  {
+    q: 'Does Y matter for portal linking?',
+    a: 'In modern Java Edition, the game prefers the closest portal within a search area and does consider height when overlaps occur. Best practice: align X and Z exactly via the calculator, and keep Y within a few blocks between paired portals.',
+  },
+  {
+    q: 'How close do two portals need to be to link?',
+    a: 'Linking searches a radius (roughly 128 blocks in scaled terms) for a candidate portal. The safest approach is making the intended partner the only portal within that radius, or the strictly nearest one; the calculator gives you coordinates that overlap exactly.',
+  },
+  {
+    q: 'Does this work for servers and realms?',
+    a: 'Yes, the 8:1 ratio is a game mechanic, identical everywhere. Server plugins that change portal behaviour are rare; if your server has one, follow its docs.',
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  canonical="/nether-portal-calculator/"
+>
+  <div class="wrap">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="hero">
+      <h1>Nether Portal Calculator</h1>
+      <p class="value-line">
+        Convert between Overworld and Nether coordinates at the correct 8:1 ratio, both directions, so
+        your portals link up first try.
+      </p>
+      <ul class="trust-microline">
+        <li class="badge badge-green">Runs in your browser</li>
+        <li class="badge">Free · No sign-up</li>
+        <li class="badge">Both directions</li>
+      </ul>
+    </div>
+
+    <section class="tool" aria-labelledby="tool-heading">
+      <h2 id="tool-heading" class="visually-hidden">Nether portal calculator tool</h2>
+
+      <div class="tool-grid cols-3">
+        <div class="field">
+          <label for="dir">Direction</label>
+          <select id="dir">
+            <option value="on" selected>Overworld → Nether</option>
+            <option value="no">Nether → Overworld</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="x">X coordinate</label>
+          <input type="number" id="x" inputmode="numeric" step="1" value="800" />
+          <span class="error" role="alert">Enter a whole number.</span>
+        </div>
+        <div class="field">
+          <label for="z">Z coordinate</label>
+          <input type="number" id="z" inputmode="numeric" step="1" value="-1200" />
+          <span class="error" role="alert">Enter a whole number.</span>
+        </div>
+      </div>
+
+      <div class="result-panel" aria-live="polite">
+        <div class="small muted" id="result-caption">Your Nether coordinates</div>
+        <div class="result-value" id="result-value">-</div>
+        <div class="result-meta">
+          <div class="kv"><div class="k">Distance (blocks)</div><div class="v" id="out-dist">-</div></div>
+          <div class="kv"><div class="k">Ratio</div><div class="v">8 : 1</div></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-primary" type="button" id="copy-btn"><span class="normal-label">Copy coordinates</span><span class="copied-label">✓ Copied</span></button>
+          <button class="btn btn-secondary" type="button" id="swap-btn">⇆ Reverse direction</button>
+        </div>
+      </div>
+
+      <p class="small muted" style="margin-top:12px">
+        Y never changes between dimensions. Runs locally in your browser; nothing is uploaded.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">How the 8:1 ratio works</h2>
+      <p>
+        One Nether block covers the same distance as eight Overworld blocks, so travel in the Nether is
+        eight times faster. The maths is a simple division or multiplication on X and Z:
+        <code>Nether X = Overworld X ÷ 8</code>, <code>Overworld X = Nether X × 8</code>
+        (same for Z; Y unchanged). The calculator rounds to whole blocks, which is what portals snap to.
+      </p>
+    </section>
+
+    <Faq items={faq} />
+
+    <TrustBlock>
+      <p class="mb-0">
+        <strong>Portal linking tips:</strong> build both portals, align coordinates with this tool, and
+        light the far side from inside the near side so the game creates the partner at the matching
+        spot. Mechanics sourced from the Minecraft Wiki; see the <a href="/methodology/">methodology page</a>.
+      </p>
+    </TrustBlock>
+
+    <section class="section" aria-labelledby="related">
+      <h2 id="related">Related tools</h2>
+      <ul class="related-grid" style="list-style:none;padding:0">
+        <li><a class="tool-card" href="/circle-generator/"><span class="tc-title">Circle Generator</span><p class="tc-desc">Perfect circles and ovals on the block grid.</p></a></li>
+        <li><a class="tool-card" href="/beacon-calculator/"><span class="tc-title">Beacon Calculator</span><p class="tc-desc">Pyramid materials and coverage for any level.</p></a></li>
+        <li><a class="tool-card" href="/tools/"><span class="tc-title">All tools →</span><p class="tc-desc">Everything CraftCalc can do.</p></a></li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id: string) => document.getElementById(id)!;
+
+    function compute() {
+      const dir = ($('dir') as HTMLSelectElement).value;
+      const x = parseFloat(($('x') as HTMLInputElement).value);
+      const z = parseFloat(($('z') as HTMLInputElement).value);
+      const validX = Number.isFinite(x);
+      const validZ = Number.isFinite(z);
+      ($('x') as HTMLInputElement).closest('.field')!.classList.toggle('invalid', !validX);
+      ($('z') as HTMLInputElement).closest('.field')!.classList.toggle('invalid', !validZ);
+      if (!validX || !validZ) { $('result-value').textContent = '-'; return; }
+
+      const toNether = dir === 'on';
+      const rx = toNether ? Math.round(x / 8) : Math.round(x * 8);
+      const rz = toNether ? Math.round(z / 8) : Math.round(z * 8);
+      $('result-caption').textContent = toNether ? 'Your Nether coordinates (X, Z)' : 'Your Overworld coordinates (X, Z)';
+      $('result-value').textContent = `${rx}, ${rz}`;
+      const dist = Math.round(Math.hypot(x, z));
+      $('out-dist').textContent = `${dist.toLocaleString()} blocks`;
+      (window as any).__coords = `${rx}, ${rz}`;
+    }
+
+    ['dir', 'x', 'z'].forEach((id) => $(id).addEventListener('input', compute));
+
+    $('swap-btn').addEventListener('click', () => {
+      const el = $('dir') as HTMLSelectElement;
+      el.value = el.value === 'on' ? 'no' : 'on';
+      // carry the computed value into the input for a true round trip
+      const v = (window as any).__coords;
+      if (v) {
+        const [rx, rz] = v.split(',').map((s: string) => parseFloat(s));
+        ($('x') as HTMLInputElement).value = String(rx);
+        ($('z') as HTMLInputElement).value = String(rz);
+      }
+      compute();
+    });
+
+    $('copy-btn').addEventListener('click', async () => {
+      const v = (window as any).__coords;
+      if (!v) return;
+      try { await navigator.clipboard.writeText(v); } catch {
+        const ta = document.createElement('textarea'); ta.value = v;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      const btn = $('copy-btn'); btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 1800);
+    });
+
+    compute();
+  </script>
+</Base>

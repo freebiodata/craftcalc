@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Internal search (none exists today; reserved)
+Disallow: /*?q=
+Disallow: /*?s=
+
+Sitemap: https://craftcalc.top/sitemap-index.xml

@@ -1,0 +1,254 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Faq from '../../components/Faq.astro';
+import TrustBlock from '../../components/TrustBlock.astro';
+import { site } from '../../data/site';
+
+const title = 'Minecraft Sphere Generator: Layer-by-Layer Plans | CraftCalc';
+const description =
+  'Generate sphere, dome and ball plans in Minecraft: every layer with its exact radius, block counts and build order. Free tool, no sign-up, in-browser.';
+
+const jsonLd = [
+  {
+    '@type': 'WebApplication',
+    '@id': `${site.url}/sphere-generator/#app`,
+    name: 'Minecraft Sphere Generator',
+    url: `${site.url}/sphere-generator/`,
+    description:
+      'Generate layer-by-layer sphere, dome and ellipsoid build plans with exact per-layer radii and block counts.',
+    applicationCategory: 'GameApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+];
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'All tools', href: '/tools/' },
+  { name: 'Sphere generator' },
+];
+
+const faq = [
+  {
+    q: 'How do sphere generators work in Minecraft?',
+    a: 'A sphere is built as stacked circles: for every height y from the bottom to the top, the layer is a circle whose radius shrinks according to <code>radius = floor(√(r² − y²))</code>. The generator lists each layer with its exact radius and outline so you can build from the equator up and down.',
+  },
+  {
+    q: 'What is the easiest way to build a sphere?',
+    a: 'Build the equator first (the widest circle, radius r), then work upward and downward one ring at a time using each layer\'s radius. Mirror the layers top-to-bottom; a sphere is symmetric, so each ring below the equator has the same radius as its counterpart above.',
+  },
+  {
+    q: 'How do I make a dome instead of a full sphere?',
+    a: 'A dome is the top half of a sphere: build only the layers from the equator up. Switch the mode to Dome and the tool lists just those layers, still with exact radii.',
+  },
+  {
+    q: 'Why do some spheres look lumpy?',
+    a: 'At small radii, block rasterization cannot render a smooth curve, so the shape is necessarily chunky: this is the geometry, not a bug. Use larger radii (9+) for recognizably round forms, or hide the seams with detailing (slabs, stairs, planters) at smaller sizes.',
+  },
+  {
+    q: 'Hollow vs filled: what should I build?',
+    a: 'For decoration, hollow shells are standard: build the outline rings and leave the interior empty. For structural spheres (e.g., a planet build you cannot see inside), filled is pointless; for thin domes you may want a double-layer shell (wall thickness 2) so both the inside and outside look clean.',
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  jsonLd={jsonLd}
+  breadcrumbs={breadcrumbs}
+  canonical="/sphere-generator/"
+>
+  <div class="wrap">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="hero">
+      <h1>Minecraft Sphere Generator</h1>
+      <p class="value-line">
+        Layer-by-layer sphere and dome plans: every level with its exact radius and ring count, ready
+        to build from the equator outward.
+      </p>
+      <ul class="trust-microline">
+        <li class="badge badge-green">Runs in your browser</li>
+        <li class="badge">Free · No sign-up</li>
+        <li class="badge">Sphere + dome modes</li>
+      </ul>
+    </div>
+
+    <section class="tool" aria-labelledby="tool-heading">
+      <h2 id="tool-heading" class="visually-hidden">Sphere generator tool</h2>
+
+      <div class="tool-grid cols-3">
+        <div class="field">
+          <label for="shape">Shape</label>
+          <select id="shape">
+            <option value="sphere" selected>Full sphere</option>
+            <option value="dome">Dome (top half)</option>
+            <option value="bowl">Bowl (bottom half)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="radius">Radius (blocks)</label>
+          <input type="number" id="radius" inputmode="numeric" min="2" max="64" step="1" value="10" />
+          <span class="helper">Equator radius, 2 to 64.</span>
+          <span class="error" role="alert">Enter a radius between 2 and 64.</span>
+        </div>
+        <div class="field">
+          <label for="thickness">Wall</label>
+          <select id="thickness">
+            <option value="1" selected>Single layer (hollow shell)</option>
+            <option value="2">Double layer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="result-panel" aria-live="polite">
+        <div class="small muted" id="result-caption">Your sphere plan</div>
+        <div class="result-value" id="result-value">-</div>
+        <div class="result-meta">
+          <div class="kv"><div class="k">Layer count</div><div class="v" id="out-layers">-</div></div>
+          <div class="kv"><div class="k">Total blocks</div><div class="v" id="out-blocks">-</div></div>
+          <div class="kv"><div class="k">Stacks (64)</div><div class="v" id="out-stacks">-</div></div>
+        </div>
+        <div class="result-actions">
+          <button class="btn btn-primary" type="button" id="copy-btn"><span class="normal-label">Copy layer plan</span><span class="copied-label">✓ Copied</span></button>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <label class="small muted" style="display:block;margin-bottom:6px">Layer plan (bottom to top)</label>
+        <div style="border:1px solid var(--border-strong);border-radius:var(--radius);padding:10px 12px;background:var(--bg-inset);max-height:340px;overflow:auto">
+          <pre id="plan" style="margin:0;font-size:0.85rem;line-height:1.6;font-family:var(--font-mono);color:var(--text-muted)">-</pre>
+        </div>
+      </div>
+
+      <p class="small muted" style="margin-top:12px">
+        The first (widest) ring is the equator for spheres, or the base for domes and bowls.
+        Runs locally; nothing is uploaded.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <h2 id="how">The sphere maths</h2>
+      <p>
+        Each layer of a sphere is a circle. For a sphere of radius <code>r</code>, the layer at height
+        <code>y</code> (measured from the equator) has radius:
+      </p>
+      <p><code>layer radius = floor(√(r² − y²))</code></p>
+      <p>
+        The equator (y = 0) gets the full radius; the pole layer (y = ±r) gets 0 (a single block). The
+        generator computes every layer's radius, renders its ring count, and totals the block cost.
+        Domes take the y ≥ 0 half; bowls take y ≤ 0.
+      </p>
+      <p class="small muted">
+        Formulas are printed in full on the <a href="/methodology/">methodology page</a>. The circle
+        rasterization inside each layer uses the same midpoint algorithm as the
+        <a href="/circle-generator/">circle generator</a>.
+      </p>
+    </section>
+
+    <Faq items={faq} />
+
+    <TrustBlock>
+      <p class="mb-0">
+        <strong>Building tip:</strong> mark your centre column first (a pillar of dirt/scaffold at the
+        equator centre) and measure each ring's radius from it. Spheres are symmetric: build the
+        bottom half, then mirror ring-for-ring above.
+      </p>
+    </TrustBlock>
+
+    <section class="section" aria-labelledby="related">
+      <h2 id="related">Related tools</h2>
+      <ul class="related-grid" style="list-style:none;padding:0">
+        <li><a class="tool-card" href="/circle-generator/"><span class="tc-title">Circle Generator</span><p class="tc-desc">Circles and ovals with copyable 2D plans.</p></a></li>
+        <li><a class="tool-card" href="/beacon-calculator/"><span class="tc-title">Beacon Calculator</span><p class="tc-desc">Pyramid planning for beacon builds.</p></a></li>
+        <li><a class="tool-card" href="/tools/"><span class="tc-title">All tools →</span><p class="tc-desc">Everything CraftCalc can do.</p></a></li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id: string) => document.getElementById(id)!;
+
+    function layerRadius(r: number, y: number): number {
+      return Math.floor(Math.sqrt(Math.max(0, r * r - y * y)));
+    }
+    function ringBlocksForRadius(rr: number): number {
+      if (rr <= 0) return 1;
+      // count unique cells of midpoint circle outline (same as circle generator)
+      const cells: Array<[number, number]> = [];
+      let x = rr, z = 0, err = 1 - rr;
+      const add = (a: number, b: number) => cells.push([a, b]);
+      while (x >= z) {
+        add(x, z); add(z, x); add(-z, x); add(-x, z);
+        add(-x, -z); add(-z, -x); add(z, -x); add(x, -z);
+        z += 1;
+        if (err < 0) err += 2 * z + 1;
+        else { x -= 1; err += 2 * (z - x) + 1; }
+      }
+      const seen = new Set<string>();
+      for (const [a, b] of cells) seen.add(a + ',' + b);
+      return seen.size;
+    }
+
+    function compute() {
+      const shape = ($('shape') as HTMLSelectElement).value;
+      const r = parseInt(($('radius') as HTMLInputElement).value);
+      const thickness = parseInt(($('thickness') as HTMLSelectElement).value);
+      const valid = Number.isFinite(r) && r >= 2 && r <= 64;
+      ($('radius') as HTMLInputElement).closest('.field')!.classList.toggle('invalid', !valid);
+      if (!valid) { $('result-value').textContent = '-'; return; }
+
+      let ys: number[];
+      if (shape === 'sphere') ys = Array.from({ length: 2 * r + 1 }, (_, i) => i - r);
+      else if (shape === 'dome') ys = Array.from({ length: r + 1 }, (_, i) => i);
+      else ys = Array.from({ length: r + 1 }, (_, i) => -i);
+
+      const lines: string[] = [];
+      let total = 0;
+      let widest = 0;
+      for (let idx = 0; idx < ys.length; idx++) {
+        const y = ys[idx];
+        const rr = layerRadius(r, y);
+        let ringCount: number;
+        if (thickness === 2 && rr > 0) {
+          const outer = ringBlocksForRadius(rr);
+          const inner = ringBlocksForRadius(Math.max(0, rr - 1));
+          ringCount = Math.max(outer, outer - inner + (rr <= 2 ? rr * 4 : 0));
+        } else {
+          ringCount = ringBlocksForRadius(rr);
+        }
+        total += ringCount;
+        widest = Math.max(widest, rr);
+        const label = shape === 'sphere'
+          ? (y === 0 ? 'equator' : y > 0 ? `+${y}` : `${y}`)
+          : `layer ${idx + 1}`;
+        lines.push(`Layer ${idx + 1} (${label}): radius ${rr}  ·  ~${ringCount} blocks`);
+      }
+
+      $('result-caption').textContent = `${shape === 'sphere' ? 'Sphere' : shape === 'dome' ? 'Dome' : 'Bowl'} r=${r}`;
+      $('result-value').textContent = `${lines.length} layers`;
+      $('out-layers').textContent = `${lines.length}`;
+      $('out-blocks').textContent = `≈ ${total.toLocaleString()}`;
+      $('out-stacks').textContent = `≈ ${(total / 64).toFixed(1)} stacks`;
+      ($('plan') as HTMLElement).textContent = lines.join('\n');
+      (window as any).__sphere = `${shape} r=${r}: ${lines.length} layers, approx ${total} blocks\n` + lines.join('\n');
+    }
+
+    ['shape', 'radius', 'thickness'].forEach((id) => $(id).addEventListener('input', compute));
+
+    $('copy-btn').addEventListener('click', async () => {
+      const v = (window as any).__sphere;
+      if (!v) return;
+      try { await navigator.clipboard.writeText(v); } catch {
+        const ta = document.createElement('textarea'); ta.value = v;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      const btn = $('copy-btn'); btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 1800);
+    });
+
+    compute();
+  </script>
+</Base>

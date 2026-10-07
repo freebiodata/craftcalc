@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { site } from '../../data/site';
+
+const title = 'About CraftCalc: Who We Are & Why These Tools Exist';
+const description =
+  'CraftCalc is an independent toolset for Minecraft builders: circle and sphere generators, portal maths, beacon planning, and how the site stays free.';
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'About' },
+];
+---
+
+<Base title={title} description={description} breadcrumbs={breadcrumbs} canonical="/about/">
+  <div class="wrap-narrow">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <h1>About CraftCalc</h1>
+    <p class="lead">
+      We build the Minecraft planning tools we kept wishing existed while designing builds ourselves:
+      exact grids, honest maths, no sign-up walls.
+    </p>
+
+    <section class="section">
+      <h2 id="why">Why this site exists</h2>
+      <p>
+        Circle generators online either use fuzzy rules or bury basic options behind ads and accounts.
+        The maths is not the hard part: rasterizing a circle on a block grid is a solved, sixty-year-old
+        algorithm. CraftCalc puts the solved part up front and spends its effort on what builders
+        actually need: buildable layers, copyable plans, and sphere mode that tells you which ring
+        goes where.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 id="how">How the tools are built &amp; tested</h2>
+      <ul>
+        <li><strong>Standard algorithms.</strong> The circle generator uses the midpoint circle algorithm (Bresenham); portal and beacon maths follow the game's documented mechanics.</li>
+        <li><strong>Tested against known values.</strong> Every formula has a hand-verified test case that must pass before deploy.</li>
+        <li><strong>Client-side only.</strong> No uploads, no accounts, nothing tracked.</li>
+        <li><strong>Corrections welcome and credited.</strong> If a mechanic changed in a patch, <a href="/contact/">tell us</a> and we fix it with a changelog entry.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 id="money">How the site makes money</h2>
+      <p>
+        Right now: nothing. CraftCalc is independent and self-funded. If we ever add sponsorships or
+        affiliate links, they will be clearly labelled (<code>rel="sponsored"</code>) and never affect
+        recommendations. Tools stay free.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 id="people">Who runs it</h2>
+      <p>
+        A small crew of long-time Minecraft players and software engineers. We have opinions about
+        spiral staircases and will defend them in writing.
+      </p>
+      <p class="small muted">
+        For corrections or partnership enquiries: <a href="/contact/">contact page</a> or {site.email}.
+      </p>
+      <p class="small muted">
+        CraftCalc is not affiliated with Mojang Studios or Microsoft.
+      </p>
+    </section>
+  </div>
+</Base>

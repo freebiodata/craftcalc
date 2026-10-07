@@ -1,0 +1,84 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { site } from '../../data/site';
+
+const title = 'Methodology: Formulas Behind Every Calculator | CraftCalc';
+const description =
+  'Every formula and game mechanic used by CraftCalc tools: circle rasterization, Nether coordinate ratios, beacon ranges and enchanting maths, with sources.';
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Methodology' },
+];
+---
+
+<Base title={title} description={description} breadcrumbs={breadcrumbs} canonical="/methodology/">
+  <div class="wrap-narrow">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <h1>Methodology &amp; editorial policy</h1>
+    <p class="lead">
+      The exact maths and game mechanics behind every CraftCalc tool, written so you can verify any
+      number we show.
+    </p>
+    <p class="small muted">Last updated: 08 Oct 2026</p>
+
+    <section class="section">
+      <h2 id="formulas">Core formulas &amp; mechanics</h2>
+      <ul>
+        <li><strong>Circle outline:</strong> midpoint circle algorithm (Bresenham, 1965) plotted on the block grid, with four-fold symmetry preserved.</li>
+        <li><strong>Ovals:</strong> parametric ellipse sampling, rounded to block cells.</li>
+        <li><strong>Spheres:</strong> stacked circles; layer radius = <code>floor(√(r² − y²))</code> for each height y from −r to +r.</li>
+        <li><strong>Nether coordinates:</strong> overworld ÷ 8 to enter the Nether; nether × 8 to return (overworld-to-nether ratio is 8:1, per Minecraft's documented dimension scaling).</li>
+        <li><strong>Beacon range:</strong> pyramid levels 1-4 give effect radii of 20, 30, 40 and 50 blocks respectively; full pyramid costs are 9, 34, 83 and 164 mineral blocks (81, 306, 747, 1476 ingots).</li>
+        <li><strong>Enchanting:</strong> each bookshelf row contributes 2 to the table's max enchant level, to a cap of 30 (15 bookshelves).</li>
+        <li><strong>XP:</strong> the standard level-cost formulas (<code>2L+7</code> for L≤15, <code>5L−38</code> for 16≤L≤30, <code>9L−158</code> for L≥31).</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 id="sources">Sources &amp; conventions</h2>
+      <ul>
+        <li><strong>Game mechanics</strong> (coordinate scaling, beacon ranges, enchanting): the Minecraft Wiki's documented mechanics, which track the official game behaviour.</li>
+        <li><strong>Circle/ellipse/sphere maths:</strong> standard rasterization and solid geometry; the code is short and auditable in your browser's dev tools.</li>
+        <li><strong>Version note:</strong> mechanics on this page reflect the Java Edition current release at the time of writing; Bedrock differences are called out where they matter.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 id="limits">Known limits</h2>
+      <ul>
+        <li><strong>Small circles:</strong> at radius 1-3, no grid pattern looks perfectly round; we show the closest rasterized form.</li>
+        <li><strong>Non-Euclidean builds:</strong> the circle generator works in block (Chebyshev grid) space, which is what placing blocks actually is.</li>
+        <li><strong>Beacon pyramids:</strong> block costs assume full solid pyramid levels as the game requires.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 id="testing">Testing &amp; QA</h2>
+      <ol>
+        <li>Every formula has a hand-calculation test case that must pass before deploy.</li>
+        <li>Grid rendering is verified against known patterns (e.g., radius-10 outline symmetry).</li>
+        <li>Mechanics change only with a changelog entry and a source link.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2 id="ai">AI use disclosure</h2>
+      <p>
+        Pages are drafted with tooling assistance and reviewed before publishing; every formula and
+        claim is verified against the sources above. No invented statistics appear on this site.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 id="corrections">Corrections policy</h2>
+      <p>
+        Found an error or a mechanic that changed in a recent patch? <a href="/contact/">Report it</a>
+        with a source. Confirmed corrections ship within a week and are listed in the
+        <a href="/changelog/">changelog</a>.
+      </p>
+    </section>
+  </div>
+</Base>

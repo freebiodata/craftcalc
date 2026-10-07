@@ -1,0 +1,96 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { site } from '../../data/site';
+
+const title = 'All Tools: Minecraft Generators & Calculators | CraftCalc';
+const description =
+  'Every CraftCalc tool in one place: circle and sphere generators, Nether portal calculator, beacon planner. Free, in-browser, no sign-up.';
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'All tools' },
+];
+
+const build = [
+  { href: '/circle-generator/', title: 'Circle Generator', desc: 'Circles and ovals on the block grid with copyable build plans.' },
+  { href: '/sphere-generator/', title: 'Sphere Generator', desc: 'Layer-by-layer sphere and dome plans with per-layer radii.' },
+];
+
+const game = [
+  { href: '/nether-portal-calculator/', title: 'Nether Portal Calculator', desc: 'Coordinate conversion at the 8:1 ratio, both directions.' },
+  { href: '/beacon-calculator/', title: 'Beacon Calculator', desc: 'Pyramid block counts, ingots and effect radius per level.' },
+];
+
+const chooser = [
+  ['I need a round tower or fountain base', 'Circle Generator'],
+  ['I want a ball or dome shape', 'Sphere Generator'],
+  ['My Nether portal links to the wrong place', 'Nether Portal Calculator'],
+  ['I do not know how many blocks a beacon needs', 'Beacon Calculator'],
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  canonical="/tools/"
+>
+  <div class="wrap">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <div class="hero">
+      <h1>All tools</h1>
+      <p class="value-line">
+        Four focused planning tools for Minecraft builds, all free and running entirely in your browser.
+      </p>
+    </div>
+
+    <section class="section" aria-labelledby="build">
+      <h2 id="build" style="margin-top:0">Build generators</h2>
+      <ul class="tool-cards">
+        {build.map((t) => <ToolCard href={t.href} title={t.title} desc={t.desc} />)}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="game">
+      <h2 id="game">Game calculators</h2>
+      <ul class="tool-cards">
+        {game.map((t) => <ToolCard href={t.href} title={t.title} desc={t.desc} />)}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="chooser">
+      <h2 id="chooser">Which tool do I need?</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Your problem</th><th>Start here</th></tr></thead>
+          <tbody>
+            {chooser.map(([problem, tool]) => (
+              <tr><td>{problem}</td><td>{tool}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faq-cat">
+      <h2 id="faq-cat">Quick answers</h2>
+      <div class="faq">
+        <details>
+          <summary>Are all the tools really free?</summary>
+          <div class="faq-body"><p>Yes. No sign-up, no watermark, no caps. The maths runs in your browser, so there is nothing to meter.</p></div>
+        </details>
+        <details>
+          <summary>Do these work on Bedrock Edition?</summary>
+          <div class="faq-body"><p>Yes. The generators describe block placements that work on both editions. Where mechanics differ (portal linking behaviour), the tool pages note it.</p></div>
+        </details>
+        <details>
+          <summary>Do the tools store my plans?</summary>
+          <div class="faq-body"><p>No. Values you enter are processed locally and never transmitted or saved after you close the tab.</p></div>
+        </details>
+      </div>
+    </section>
+  </div>
+</Base>

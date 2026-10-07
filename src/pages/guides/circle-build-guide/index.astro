@@ -1,0 +1,119 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Faq from '../../../components/Faq.astro';
+import TrustBlock from '../../../components/TrustBlock.astro';
+import { site } from '../../../data/site';
+
+const title = 'How to Build Circles in Minecraft: The Easy Method';
+const description =
+  'The centre-first method for building perfect Minecraft circles: mark, quarter, mirror, detail. Works for any radius with the circle generator.';
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Guides', href: '/guides/' },
+  { name: 'Circle build guide' },
+];
+
+const faq = [
+  {
+    q: 'Do I build the outline first or the fill?',
+    a: 'Outline first. Place the perimeter blocks from the generator, check the proportions from a distance (fly up if you can), then fill inward. Fixing an outline is cheap; fixing a filled shape is not.',
+  },
+  {
+    q: 'How do I make circles look rounder in Minecraft?',
+    a: 'Three tricks: (1) use larger radii - blockiness is geometry, not a mistake; (2) add a second ring offset inward at the diagonals for a smoother silhouette; (3) disguise the steps with slabs, stairs and wall blocks along the perimeter.',
+  },
+  {
+    q: 'What is the best block palette for a circle?',
+    a: 'A three-tone rule works well: a structural outline block (deepslate, stone), a fill block one shade lighter, and an accent for the rim (slabs, fences, greenery). Avoid single-block-type construction; the shading hides rasterization steps.',
+  },
+];
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={breadcrumbs}
+  canonical="/guides/circle-build-guide/"
+  type="article"
+  jsonLd={[
+    {
+      '@type': 'Article',
+      headline: 'How to Build Circles in Minecraft: The Easy Method',
+      datePublished: '2026-10-08',
+      dateModified: '2026-10-08',
+      author: { '@type': 'Organization', name: site.name, url: `${site.url}/about/` },
+    },
+  ]}
+>
+  <div class="wrap-narrow">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <h1>How to build circles in Minecraft</h1>
+    <p class="lead">
+      Circles are the foundation of every tower, fountain, arena and dome. The build method is simpler
+      than the shape suggests: mark a centre, build a quarter, mirror it. Here is the whole workflow.
+    </p>
+    <p class="small muted">Published 08 Oct 2026 · By the CraftCalc team</p>
+
+    <section class="section">
+      <h2 id="answer">Quick answer</h2>
+      <p>
+        Generate your radius <a href="/circle-generator/">with the circle generator</a>, mark the centre
+        block in-world, build the pattern for one quadrant, then mirror it into the other three. The
+        grid pattern is rotationally symmetric by construction, so the four quarters always match.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 id="method">The five-step method</h2>
+      <ol class="steps">
+        <li><strong>Pick the radius.</strong> Radius = blocks from centre to edge. For a 21-block-wide tower base, radius is 10. Generate that pattern.</li>
+        <li><strong>Mark the centre.</strong> Place a distinctive block (or a temporary pillar) at the centre spot. Everything is measured from here.</li>
+        <li><strong>Build one quadrant.</strong> The preview grid shows every cell; build just the north-east quarter (top-right) of the outline.</li>
+        <li><strong>Mirror, don't re-measure.</strong> Copy your quadrant east-west and north-south. When the pattern is symmetric, mirroring is faster and less error-prone than counting on all four sides.</li>
+        <li><strong>Fill and detail.</strong> Swap the outline material if desired, fill the interior, then add the second ring, rim slabs and lighting. Detailing hides the blocky steps and makes the circle read as round.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2 id="sizes">Choosing sizes: odd vs even</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Radius</th><th>Total width</th><th>Good for</th></tr></thead>
+          <tbody>
+            <tr><td>5</td><td>11 blocks</td><td>Fountain tops, small planters</td></tr>
+            <tr><td>10</td><td>21 blocks</td><td>Tower bases, small arenas</td></tr>
+            <tr><td>15</td><td>31 blocks</td><td>Medium arenas, big towers</td></tr>
+            <tr><td>30+</td><td>61+ blocks</td><td>Stadiums, large arenas, crop fields</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted" style="margin-top:10px">
+        Odd widths (radius like 5, 10 gives 2r+1 = 21) have a true centre block, which makes symmetric
+        detailing easier. Our generator uses the 2r+1 convention throughout.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 id="mistakes">Common mistakes</h2>
+      <ul>
+        <li><strong>Filling before checking the outline.</strong> Fly up and look down at the outline first; a skewed quadrant is obvious from above.</li>
+        <li><strong>Counting instead of mirroring.</strong> Hand-counting all four sides invites one-block errors; mirroring your built quadrant cannot drift.</li>
+        <li><strong>Expecting radius 2 to look round.</strong> Below radius ~5, blocks cannot render a smooth curve. That is normal; use the smallest size that reads as round for your purpose.</li>
+        <li><strong>Forgetting the rim.</strong> Slabs and stairs on the perimeter, plus a slightly darker outline block, are what make circles look deliberate rather than accidental.</li>
+      </ul>
+    </section>
+
+    <Faq items={faq} />
+
+    <TrustBlock>
+      <p class="mb-0">
+        The generator's maths (midpoint circle algorithm) is documented on the
+        <a href="/methodology/">methodology page</a>. This guide describes build workflow; the grid
+        itself is generated, not eyeballed.
+      </p>
+    </TrustBlock>
+  </div>
+</Base>

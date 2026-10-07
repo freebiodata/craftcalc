@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { site } from '../data/site';
+
+const title = 'CraftCalc: Free Minecraft Circle & Build Calculators';
+const description =
+  'Free browser tools for Minecraft builders: pixel-perfect circle and sphere generators, Nether portal coordinates, beacon planning. No sign-up needed.';
+
+const tools = [
+  {
+    href: '/circle-generator/',
+    title: 'Minecraft Circle Generator',
+    desc: 'Pixel-perfect circles and ovals on the block grid, with build plans you can copy.',
+    badge: 'Most used',
+  },
+  {
+    href: '/sphere-generator/',
+    title: 'Sphere Generator',
+    desc: 'Layer-by-layer sphere and dome plans, with per-layer radii for clean builds.',
+  },
+  {
+    href: '/nether-portal-calculator/',
+    title: 'Nether Portal Calculator',
+    desc: 'Overworld and Nether coordinates at the correct 8:1 ratio, both directions.',
+  },
+  {
+    href: '/beacon-calculator/',
+    title: 'Beacon Calculator',
+    desc: 'Pyramid materials and effect range for every beacon level.',
+    badge: 'Planner',
+  },
+];
+
+const guides = [
+  {
+    href: '/guides/circle-build-guide/',
+    title: 'How to build circles in Minecraft',
+    desc: 'From centre block to four-quadrant mirroring: the method that makes round builds easy.',
+  },
+];
+---
+
+<Base title={title} description={description} canonical="/">
+  <div class="wrap">
+    <div class="hero" style="padding-top:40px">
+      <h1>Free Minecraft planning tools</h1>
+      <p class="value-line" style="font-size:1.15rem">
+        Circle and sphere generators with buildable plans, portal coordinate maths and beacon planning,
+        all in your browser. <strong>No sign-up, nothing uploaded.</strong>
+      </p>
+      <ul class="trust-microline">
+        <li class="badge badge-green">100% client-side math</li>
+        <li class="badge">Java &amp; Bedrock friendly</li>
+        <li class="badge">Copyable build plans</li>
+      </ul>
+      <div class="result-actions" style="margin-top:22px">
+        <a class="btn btn-primary" href="/circle-generator/" style="padding:12px 24px;font-size:1.05rem">
+          Make a circle →
+        </a>
+        <a class="btn btn-secondary" href="/tools/" style="padding:12px 24px;font-size:1.05rem">Browse all tools</a>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="tools-heading">
+      <h2 id="tools-heading">The toolkit</h2>
+      <ul class="tool-cards">
+        {tools.map((t) => (
+          <ToolCard href={t.href} title={t.title} desc={t.desc} badge={t.badge} />
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="why">
+      <h2 id="why">Why CraftCalc</h2>
+      <div class="card">
+        <ul style="margin:0">
+          <li><strong>Standard algorithms, verified.</strong> The circle generator uses the midpoint circle algorithm; mechanics follow the game's documented values with sources on the <a href="/methodology/">methodology page</a>.</li>
+          <li><strong>Everything runs locally.</strong> No uploads, no accounts, no tracking of what you plan.</li>
+          <li><strong>Built for actual builds.</strong> Copyable plans, layer-by-layer spheres, and honest notes on where small sizes stop looking round.</li>
+          <li><strong>Free, plain and fast.</strong> No interstitials, no sign-up walls, no watermarks.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="guides-heading">
+      <h2 id="guides-heading">Learn the methods</h2>
+      <ul class="related-grid" style="list-style:none;padding:0">
+        {guides.map((g) => (
+          <li>
+            <a class="tool-card" href={g.href}>
+              <span class="tc-title">{g.title}</span>
+              <p class="tc-desc">{g.desc}</p>
+            </a>
+          </li>
+        ))}
+        <li>
+          <a class="tool-card" href="/guides/">
+            <span class="tc-title">All guides →</span>
+            <p class="tc-desc">Practical build methods, explained simply.</p>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="about-summ">
+      <h2 id="about-summ">Who runs this site</h2>
+      <p class="lead">
+        CraftCalc is an independent, builder-run toolset, not affiliated with Mojang or Microsoft.
+        <a href="/about/">Read the full story</a> or check the <a href="/methodology/">methodology</a>
+        behind every number.
+      </p>
+    </section>
+  </div>
+</Base>
